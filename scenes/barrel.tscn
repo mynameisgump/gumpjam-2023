@@ -1,0 +1,88 @@
+[gd_scene load_steps=9 format=3 uid="uid://dlbk53x3qv7ak"]
+
+[ext_resource type="Script" path="res://barrel.gd" id="1_lbdqs"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_srdyp"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ebg8g"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3qilt"]
+material = SubResource("StandardMaterial3D_ebg8g")
+
+[sub_resource type="Animation" id="Animation_y2etf"]
+resource_name = "Afterburn"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:mesh:material:albedo_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.137255, 1, 0, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_e011g"]
+resource_name = "Hurt"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:mesh:material:albedo_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(-0.1, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 0, 0.0313726, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_8a2fn"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:mesh:material:albedo_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ci74h"]
+_data = {
+"Afterburn": SubResource("Animation_y2etf"),
+"Hurt": SubResource("Animation_e011g"),
+"RESET": SubResource("Animation_8a2fn")
+}
+
+[node name="RigidBody3D" type="RigidBody3D"]
+script = ExtResource("1_lbdqs")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CylinderShape3D_srdyp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CylinderMesh_3qilt")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_ci74h")
+}
+
+[node name="BurningTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="BurnTickTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true

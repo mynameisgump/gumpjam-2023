@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://ohh0lmgpmsfy"]
+
+[ext_resource type="PackedScene" uid="uid://4myg3f614trw" path="res://assets/Models/Rat_1.glb" id="1_e7wkk"]
+
+[node name="Rat_Test" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+
+[node name="Rat_1" parent="." instance=ExtResource("1_e7wkk")]

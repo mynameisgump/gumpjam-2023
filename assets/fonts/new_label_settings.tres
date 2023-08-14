@@ -1,0 +1,8 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://i7g0ofj264uf"]
+
+[ext_resource type="FontFile" uid="uid://dudh6s235njti" path="res://assets/fonts/rvn-font-of-doom-1/RVn_Font_of_Doom_1.ttf" id="1_nnukq"]
+
+[resource]
+font = ExtResource("1_nnukq")
+font_size = 50
+font_color = Color(0.227451, 1, 0, 1)

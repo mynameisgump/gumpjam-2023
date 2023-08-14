@@ -1,0 +1,78 @@
+[gd_resource type="StandardMaterial3D" load_steps=10 format=3 uid="uid://c0xhf4vr15kgc"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_v3mv0"]
+load_path = "res://.godot/imported/Rat_1_Rat_COL.png-23cb480773a47635a96498296debdf6c.s3tc.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_yenid"]
+load_path = "res://.godot/imported/Rat_1_Rat_roughness.png-d93114144eb001468697e77ec1d0c41e.s3tc.ctex"
+
+[sub_resource type="Shader" id="Shader_1l7lb"]
+code = "shader_type spatial;
+
+
+uniform sampler2D texture_albedo;
+uniform sampler2D texture_normal;
+
+
+uniform vec4 emission_color : source_color = vec4(1);
+uniform float emission_amount;
+
+uniform sampler2D dissolve_texture;
+uniform float burn_size : hint_range(0,2);
+uniform float dissolve_amount : hint_range(0,1);
+varying vec2 tex_position;
+void vertex() {
+  tex_position = VERTEX.xz / 2.0 + 0.5;
+}
+
+void fragment() {
+	vec4 albedo_tex = texture(texture_albedo,UV);
+	ALBEDO = albedo_tex.rgb;
+	
+	float sample = texture(dissolve_texture, UV).r;
+	float emission_value = 1.0 - smoothstep(dissolve_amount, dissolve_amount + burn_size, sample);
+	EMISSION = vec3(emission_value * emission_amount * emission_color.rgb);
+	ALPHA = smoothstep(dissolve_amount - burn_size, dissolve_amount, sample);
+	NORMAL_MAP = texture(texture_normal, tex_position).xyz;
+	ROUGHNESS = 1.0;
+}"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ehrjb"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_n6k34"]
+noise = SubResource("FastNoiseLite_ehrjb")
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_h5vi4"]
+load_path = "res://.godot/imported/The_Missing_textures.webp-af78d0bd8bcb9700b958ebaa3a123f58.s3tc.ctex"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mnckl"]
+render_priority = 0
+shader = SubResource("Shader_1l7lb")
+shader_parameter/emission_color = Color(1, 1, 1, 1)
+shader_parameter/emission_amount = 0.0
+shader_parameter/burn_size = 0.0
+shader_parameter/dissolve_amount = 1.0
+shader_parameter/texture_albedo = SubResource("CompressedTexture2D_h5vi4")
+shader_parameter/dissolve_texture = SubResource("NoiseTexture2D_n6k34")
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_3kaof"]
+load_path = "res://.godot/imported/Rat_1_Rat_NRM.png-d0fe0b4b40ffa70e7f40f7b87badbcf8.s3tc.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_nbxdf"]
+load_path = "res://.godot/imported/Rat_1_Rat_roughness.png-d93114144eb001468697e77ec1d0c41e.s3tc.ctex"
+
+[resource]
+resource_name = "Rat"
+next_pass = SubResource("ShaderMaterial_mnckl")
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = SubResource("CompressedTexture2D_v3mv0")
+metallic_texture = SubResource("CompressedTexture2D_yenid")
+metallic_texture_channel = 2
+roughness_texture = SubResource("CompressedTexture2D_nbxdf")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_texture = SubResource("CompressedTexture2D_3kaof")
